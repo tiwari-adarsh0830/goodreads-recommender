@@ -1,0 +1,11 @@
+=== Split statistics (seed=1004, min_int=10, frac=0.7/0.15/0.15) ===
+total interactions  :     228,648,342
+train rows          :     159,828,047  (69.90%)
+val   rows          :      34,218,012  (14.97%)
+test  rows          :      34,602,283  (15.13%)
+
+eligible users (>= 10 ints)  :    772,730
+ineligible users (< 10 ints) :    103,415
+users appearing in train      :    876,145
+users appearing in val        :    772,730
+users appearing in test       :    772,730

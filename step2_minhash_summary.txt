@@ -1,0 +1,10 @@
+=== Step 2 (MinHash market segmentation) v3 summary ===
+is_read=1 interactions used     : 112,131,203
+NUM_USERS (vector dimension)    : 876,145
+MIN_READERS popularity filter   : 200
+books surviving filter          : 67,100
+NUM_HASH_TABLES                 : 32
+LSH Jaccard-distance threshold  : 0.3
+top-K returned                  : 100
+top exact Jaccard               : 0.9502
+100th exact Jaccard             : 0.8963

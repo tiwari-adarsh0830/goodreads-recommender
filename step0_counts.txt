@@ -1,0 +1,8 @@
+=== Goodreads dataset sanity counts (at7095 step0) ===
+interactions rows                :     228,648,342
+distinct users (in interactions) :         876,145
+distinct books (in interactions) :       2,360,650
+user_id_map rows                 :         876,145
+book_id_map rows                 :       2,360,650
+
+Brief expected ~223M interactions, ~876K users, ~2.4M books.

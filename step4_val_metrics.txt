@@ -1,0 +1,10 @@
+=== Deliverable 3: Explicit-Feedback ALS - VAL ===
+rank=50, regParam=0.1, maxIter=10, seed=1004
+Training filter : rating > 0
+Ground truth    : is_read = 1
+
+--- Validation ---
+  n_users evaluated : 239,999
+  Precision@100     : 0.000016
+  MAP@100           : 0.000017
+  NDCG@100          : 0.000084

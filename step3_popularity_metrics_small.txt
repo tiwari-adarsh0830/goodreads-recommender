@@ -1,0 +1,26 @@
+=== Step 3 (Popularity baseline) | small=True ===
+BAYES_C            : 20
+global mean rating : 3.9425
+K (eval cutoff)    : 100
+K (global oversample): 1000
+
+--- POP_READ on validation (k=100) ---
+users evaluated   :      7,631
+Precision@100    : 0.021850
+MAP@100          : 0.031538
+NDCG@100         : 0.103088
+--- POP_READ on test (k=100) ---
+users evaluated   :      7,699
+Precision@100    : 0.022079
+MAP@100          : 0.031923
+NDCG@100         : 0.104310
+--- POP_BAYES on validation (k=100) ---
+users evaluated   :      7,631
+Precision@100    : 0.006799
+MAP@100          : 0.005574
+NDCG@100         : 0.027362
+--- POP_BAYES on test (k=100) ---
+users evaluated   :      7,699
+Precision@100    : 0.006924
+MAP@100          : 0.005639
+NDCG@100         : 0.027783

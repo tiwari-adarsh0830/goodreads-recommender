@@ -1,0 +1,5 @@
+=== Small (1% user) prototyping splits ===
+sampled users : 9,026
+train rows    : 1,679,431
+val   rows    : 359,571
+test  rows    : 363,499
