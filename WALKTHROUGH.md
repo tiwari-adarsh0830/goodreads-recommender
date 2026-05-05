@@ -172,4 +172,4 @@ Best model across all metrics. Beats D4 on both val and test.
 
 ## AI Disclosure
 
-Claude (Anthropic) was used extensively throughout this project — for writing and debugging PySpark scripts, diagnosing the D3 eval bug, and structuring the report. All experimental design decisions, parameter choices, and result interpretation are my own.
+Claude (Anthropic) was used throughout this project for writing and debugging PySpark scripts. All experimental design decisions, parameter choices, and result interpretation are my own.
