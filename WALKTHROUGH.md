@@ -1,5 +1,5 @@
 # Capstone Walkthrough — DSGA1004 Big Data, Spring 2026
-**NetID:** at7095 | Solo project
+**NetID:** at7095 
 
 This is my personal walkthrough of everything I did, in the order I did it, with the actual results. The README has the formal project description — this is the real story of what happened.
 
