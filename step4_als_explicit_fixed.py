@@ -36,10 +36,9 @@ spark.sparkContext.setCheckpointDir(CKPT_DIR)
 spark.sparkContext.setLogLevel("WARN")
 
 # Use small split for speed — same model, reproducible
-train_raw = spark.read.parquet(f"{SMALL}/train_small.parquet")
-val_raw   = spark.read.parquet(f"{SMALL}/val_small.parquet")
-test_raw  = spark.read.parquet(f"{SMALL}/test_small.parquet")
-
+train_raw = spark.read.parquet(f"{BASE}/train.parquet")
+val_raw   = spark.read.parquet(f"{BASE}/val.parquet")
+test_raw  = spark.read.parquet(f"{BASE}/test.parquet")
 # Explicit training rows only
 train_explicit = (
     train_raw
