@@ -46,7 +46,8 @@ from pyspark.ml.recommendation import ALSModel
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from eval_helpers import compute_ranking_metrics
 
-BASE      = "hdfs:///user/ss21040_nyu_edu/goodreads"
+NETID     = os.environ.get("NETID", "ss21040")
+BASE      = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 OUT_DIR   = f"{BASE}/als_explicit/full"
 MODEL_DIR = f"{OUT_DIR}/model"
 CKPT_DIR  = f"{BASE}/checkpoints"

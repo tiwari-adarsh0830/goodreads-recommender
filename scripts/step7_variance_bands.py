@@ -39,7 +39,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 # ---- Constants ----------------------------------------------------------
-NETID    = "at7095"
+NETID    = os.environ.get("NETID", "ss21040")
 BASE     = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 K_EVAL   = 100
 RNG_SEED = 1004

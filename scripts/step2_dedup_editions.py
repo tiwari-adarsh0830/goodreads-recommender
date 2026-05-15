@@ -50,7 +50,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 # ---- Constants ----------------------------------------------------------
-NETID            = "at7095"
+NETID            = os.environ.get("NETID", "ss21040")
 DATA_DIR         = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 TOP_IN           = f"{DATA_DIR}/minhash/top100_pairs.parquet"
 CAND_IN          = f"{DATA_DIR}/minhash/candidates.parquet"   # optional
