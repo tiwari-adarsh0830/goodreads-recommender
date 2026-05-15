@@ -1,7 +1,7 @@
 """
 Step 3 (Deliverable 2): Popularity baseline + reusable evaluation framework.
 
-Author : at7095 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 This script:
   1. Computes two popularity rankings on the training split:

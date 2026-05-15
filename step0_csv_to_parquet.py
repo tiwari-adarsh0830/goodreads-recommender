@@ -1,7 +1,7 @@
 """
 Step 0: CSV -> Parquet conversion + distributional sanity statistics.
 
-Author : at7095 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Purpose
 -------
