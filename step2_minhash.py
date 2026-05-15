@@ -1,7 +1,7 @@
 """
 Step 2 (Deliverable 1) v3: MinHash + LSH market segmentation.
 
-Author : at7095 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Why MIN_READERS=200
 -------------------

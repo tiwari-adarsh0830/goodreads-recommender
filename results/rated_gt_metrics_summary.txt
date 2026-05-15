@@ -1,0 +1,25 @@
+=== Deliverable 3 (rated-only GT): Explicit ALS - Small Split ===
+rank=50, regParam=0.1, maxIter=10, seed=1004
+User batch size : 500
+Training filter : rating > 0
+Ground truth    : is_read = 1 AND rating > 0  (RATED HOLDOUT ONLY)
+Seen filter     : training rows with rating > 0
+Recommendation  : warm users processed in batches
+
+--- Validation (small split, rated GT) ---
+  n_users evaluated : 7,497
+  Precision@100     : 0.000019
+  MAP@100           : 0.000010
+  NDCG@100          : 0.000109
+
+--- Test (small split, rated GT) ---
+  n_users evaluated : 7,536
+  Precision@100     : 0.000005
+  MAP@100           : 0.000001
+  NDCG@100          : 0.000015
+
+Interpretation note: compare against the default is_read=1 numbers in
+step4_val_metrics.txt / step4 test_small_metrics_summary.txt. A lift
+here without a corresponding lift on is_read=1 means D3 is recovering
+preference order on rated items but missing the unrated consumption
+events the report's main eval target requires.

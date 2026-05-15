@@ -1,0 +1,8 @@
+=== Step 7 variance bands | model=d4 split=test ===
+users in eval set : 7,699
+bootstrap B       : 500
+RNG seed          : 1004
+
+P@100      point=0.046097  mean=0.046066  sd=0.000539  95% CI=[0.044985, 0.047077]
+MAP@100    point=0.073717  mean=0.073788  sd=0.001266  95% CI=[0.071479, 0.076357]
+NDCG@100   point=0.204742  mean=0.204787  sd=0.001966  95% CI=[0.201152, 0.208513]

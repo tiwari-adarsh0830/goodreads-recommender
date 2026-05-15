@@ -1,7 +1,7 @@
 """
 Step 1: User-stratified 70/15/15 train/val/test split + 1% prototyping sample.
 
-Author : at7095 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Design (defended in the report)
 -------------------------------
