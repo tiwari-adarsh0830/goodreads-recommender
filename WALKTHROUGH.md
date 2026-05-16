@@ -115,7 +115,7 @@ Switched to `implicitPrefs=True`. Instead of predicting a rating, the model lear
 
 2.3× improvement in MAP over popularity baseline.
 
-**D4v2 — adding is_reviewed:** tried adding `0.5 * is_reviewed` to the signal. Slightly hurt performance (MAP dropped from 0.0731 to 0.0719 on val). Makes sense — people review books they disliked too.
+**D4v2 — adding is_reviewed: tried adding 0.5 * is_reviewed to the signal. Slightly hurt performance (MAP dropped from 0.0731 to 0.0708 on val).
 
 ---
 
@@ -148,7 +148,7 @@ Best model across all metrics. Beats D4 on both val and test.
 | D2 Popularity (POP_READ) | 0.0311 | 0.0315 | 0.1036 |
 | D3 Explicit ALS | 0.000012 | 0.000006 | 0.000059 |
 | D4 Implicit ALS | 0.0731 | 0.0738 | 0.2063 |
-| D4v2 Implicit (+reviews) | 0.0719 | 0.0723 | 0.2027 |
+| D4v2 Implicit (+reviews) | 0.0708 | 0.0719 | 0.2032 |
 | **D5 Combined (best)** | **0.0734** | **0.0758** | **0.2089** |
 
 ---
