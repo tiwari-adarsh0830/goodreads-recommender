@@ -51,7 +51,13 @@ Other folders:
 
 ## Running it
 
-The scripts were written for NYU's Dataproc cluster (Spark on YARN with HDFS), and each one has its `spark-submit` command in the docstring at the top. They read and write under `hdfs:///user/<netid>_nyu_edu/goodreads`. In the top-level scripts our NetID is set in `NETID` or `BASE` near the top, so change it to yours. The scripts in `scripts/` read it from a `NETID` environment variable.
+The scripts were written for NYU's Dataproc cluster (Spark on YARN with HDFS), and each one has its `spark-submit` command in the docstring at the top. They read and write under `hdfs:///user/<netid>_nyu_edu/goodreads`, and the NetID comes from a `NETID` environment variable:
+
+```
+export NETID=your_netid
+```
+
+That works for client mode. For scripts submitted in cluster mode, also pass it to the driver with `--conf spark.yarn.appMasterEnv.NETID=$NETID`.
 
 The raw data isn't in this repo. The Goodreads dataset is available from the [UCSD Goodreads dataset page](https://mengtingwan.github.io/data/goodreads.html).
 

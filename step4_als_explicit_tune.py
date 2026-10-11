@@ -40,7 +40,7 @@ from eval_helpers import compute_ranking_metrics
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-BASE    = "hdfs:///user/at7095_nyu_edu/goodreads"
+BASE    = f"hdfs:///user/{os.environ.get('NETID', 'your_netid')}_nyu_edu/goodreads"
 TRAIN_S = f"{BASE}/train_small.parquet"
 VAL_S   = f"{BASE}/val_small.parquet"
 OUT_DIR = f"{BASE}/als_explicit/tune"

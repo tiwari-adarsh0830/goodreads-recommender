@@ -1,7 +1,7 @@
 """
 Step 7: Bootstrap variance bands on the 1% small-split ranking metrics.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 What this does
 --------------
@@ -39,7 +39,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 # ---- Constants ----------------------------------------------------------
-NETID    = os.environ.get("NETID", "ss21040")
+NETID    = os.environ.get("NETID", "your_netid")
 BASE     = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 K_EVAL   = 100
 RNG_SEED = 1004

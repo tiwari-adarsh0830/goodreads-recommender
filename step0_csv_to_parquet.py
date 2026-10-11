@@ -1,7 +1,7 @@
 """
 Step 0: CSV -> Parquet conversion + distributional sanity statistics.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Purpose
 -------
@@ -25,9 +25,9 @@ driver memory stays under the documented 3 GB login-node cap):
 
 Outputs (HDFS)
 --------------
-    /user/at7095_nyu_edu/goodreads/interactions.parquet
-    /user/at7095_nyu_edu/goodreads/user_id_map.parquet
-    /user/at7095_nyu_edu/goodreads/book_id_map.parquet
+    /user/<netid>_nyu_edu/goodreads/interactions.parquet
+    /user/<netid>_nyu_edu/goodreads/user_id_map.parquet
+    /user/<netid>_nyu_edu/goodreads/book_id_map.parquet
 
 Outputs (local, for the report)
 -------------------------------
@@ -47,7 +47,7 @@ from pyspark.sql.types import (
 from pyspark import StorageLevel
 
 # ---- Constants ----------------------------------------------------------
-NETID   = "at7095"
+NETID   = os.environ.get("NETID", "your_netid")
 SRC_DIR = "hdfs:///user/pw44_nyu_edu"
 DST_DIR = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 LOCAL_REPORT_DIR = os.path.expanduser("~/goodreads_capstone/report_artifacts")

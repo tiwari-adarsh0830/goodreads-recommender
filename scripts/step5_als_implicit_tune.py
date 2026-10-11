@@ -43,7 +43,7 @@ from eval_helpers import compute_ranking_metrics
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-NETID   = os.environ.get("NETID", "ss21040")
+NETID   = os.environ.get("NETID", "your_netid")
 BASE    = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 TRAIN_S = f"{BASE}/train_small.parquet"
 VAL_S   = f"{BASE}/val_small.parquet"

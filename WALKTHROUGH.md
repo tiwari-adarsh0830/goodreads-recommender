@@ -1,5 +1,5 @@
 # Capstone Walkthrough — DSGA1004 Big Data, Spring 2026
-**NetIDs:** at7095, ss21040
+**Team:** Adarsh Tiwari, Sheetal Sood
 
 This is our project walkthrough of what we built, ran, and found. The README has the formal project description.
 
@@ -178,7 +178,7 @@ D5 remains best but intervals overlap — improvement is directionally consisten
 
 ## Contributions
 
-This project was completed jointly by at7095 and ss21040. Every design decision was discussed together. Earlier commits from at7095's machine, later commits from ss21040's machine. Both members participated throughout.
+This project was completed jointly by Adarsh Tiwari and Sheetal Sood. Every design decision was discussed together. Earlier commits came from Adarsh's machine and later ones from Sheetal's. Both members participated throughout.
 
 ## AI Disclosure
 

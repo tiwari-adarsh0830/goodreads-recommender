@@ -1,7 +1,7 @@
 """
 eval_helpers.py — canonical ranking-metric evaluator for the Goodreads capstone.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Used by deliverables 2, 3, 4, 5 (popularity, explicit ALS, implicit ALS,
 combined). The single function `compute_ranking_metrics` accepts a

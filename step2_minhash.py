@@ -1,7 +1,7 @@
 """
 Step 2 (Deliverable 1) v3: MinHash + LSH market segmentation.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Why MIN_READERS=200
 -------------------
@@ -62,6 +62,7 @@ Run command (cluster mode):
         --conf spark.yarn.maxAppAttempts=1 \\
         ~/goodreads_capstone/scripts/step2_minhash.py
 """
+import os
 import time
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -70,7 +71,7 @@ from pyspark.ml.linalg import Vectors, VectorUDT
 from pyspark import StorageLevel
 
 # ---- Constants ----------------------------------------------------------
-NETID            = "at7095"
+NETID            = os.environ.get("NETID", "your_netid")
 DATA_DIR         = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 OUT_DIR          = f"{DATA_DIR}/minhash"
 

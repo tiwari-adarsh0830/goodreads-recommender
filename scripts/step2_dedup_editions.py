@@ -2,7 +2,7 @@
 Step 2b (Deliverable 1 follow-up): edition-level deduplication of the top-K
 similar book pairs.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Context
 -------
@@ -50,7 +50,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 # ---- Constants ----------------------------------------------------------
-NETID            = os.environ.get("NETID", "ss21040")
+NETID            = os.environ.get("NETID", "your_netid")
 DATA_DIR         = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 TOP_IN           = f"{DATA_DIR}/minhash/top100_pairs.parquet"
 CAND_IN          = f"{DATA_DIR}/minhash/candidates.parquet"   # optional

@@ -35,7 +35,7 @@ from eval_helpers import compute_ranking_metrics
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-BASE     = "hdfs:///user/at7095_nyu_edu/goodreads"
+BASE     = f"hdfs:///user/{os.environ.get('NETID', 'your_netid')}_nyu_edu/goodreads"
 TRAIN    = f"{BASE}/train.parquet"
 VAL      = f"{BASE}/val.parquet"
 TEST     = f"{BASE}/test.parquet"
@@ -62,7 +62,7 @@ spark = (SparkSession.builder
          .config("spark.driver.maxResultSize", "0")
          .config("spark.sql.shuffle.partitions", "600")
          .getOrCreate())
-spark.sparkContext.setCheckpointDir("hdfs:///user/at7095_nyu_edu/goodreads/checkpoints")
+spark.sparkContext.setCheckpointDir(f"hdfs:///user/{os.environ.get('NETID', 'your_netid')}_nyu_edu/goodreads/checkpoints")
 spark.sparkContext.setLogLevel("WARN")
 
 print(f"[full] Hyperparameters: rank={BEST_RANK}, regParam={BEST_REG}")

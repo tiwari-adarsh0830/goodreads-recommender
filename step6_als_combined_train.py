@@ -1,4 +1,5 @@
 
+import os
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.ml.recommendation import ALS
@@ -11,7 +12,7 @@ spark = (SparkSession.builder
          .getOrCreate())
 spark.sparkContext.setLogLevel("WARN")
 
-BASE    = "hdfs:///user/at7095_nyu_edu/goodreads"
+BASE    = f"hdfs:///user/{os.environ.get('NETID', 'your_netid')}_nyu_edu/goodreads"
 OUT_DIR = f"{BASE}/als_combined/full"
 
 print("[train] Loading training data...")

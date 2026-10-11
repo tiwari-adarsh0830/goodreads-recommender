@@ -1,7 +1,7 @@
 """
 Step 3 (Deliverable 2): Popularity baseline + reusable evaluation framework.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 This script:
   1. Computes two popularity rankings on the training split:
@@ -53,7 +53,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from eval_helpers import compute_ranking_metrics, format_metrics
 
 # ---- Constants ----------------------------------------------------------
-NETID            = "at7095"
+NETID            = os.environ.get("NETID", "your_netid")
 DATA_DIR         = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 OUT_DIR          = f"{DATA_DIR}/popularity"
 LOCAL_REPORT_DIR = os.path.expanduser("~/goodreads_capstone/report_artifacts")

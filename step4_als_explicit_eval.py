@@ -48,7 +48,7 @@ from eval_helpers import compute_ranking_metrics
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-BASE      = "hdfs:///user/at7095_nyu_edu/goodreads"
+BASE      = f"hdfs:///user/{os.environ.get('NETID', 'your_netid')}_nyu_edu/goodreads"
 OUT_DIR   = f"{BASE}/als_explicit/full"
 MODEL_DIR = f"{OUT_DIR}/model"
 CKPT_DIR  = f"{BASE}/checkpoints"

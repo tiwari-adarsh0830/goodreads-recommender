@@ -2,10 +2,10 @@ import sys, os
 from pyspark.sql import SparkSession, Window
 from pyspark.sql import functions as F
 from pyspark.ml.recommendation import ALSModel
-sys.path.insert(0, '/home/at7095_nyu_edu')
+sys.path.insert(0, os.path.expanduser("~"))
 from eval_helpers import compute_ranking_metrics
 
-BASE      = "hdfs:///user/at7095_nyu_edu/goodreads"
+BASE      = f"hdfs:///user/{os.environ.get('NETID', 'your_netid')}_nyu_edu/goodreads"
 MODEL_DIR = f"{BASE}/als_explicit/full/model"
 OUT_DIR   = f"{BASE}/als_explicit/fixed"
 CKPT_DIR  = f"{BASE}/checkpoints"

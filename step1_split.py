@@ -1,7 +1,7 @@
 """
 Step 1: User-stratified 70/15/15 train/val/test split + 1% prototyping sample.
 
-Author: at7095 and ss21040 (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
+Author: Adarsh Tiwari and Sheetal Sood (Goodreads Capstone, DSGA1004 Big Data, Spring 2026)
 
 Design (defended in the report)
 -------------------------------
@@ -28,12 +28,12 @@ Run:
         2>&1 | tee ~/goodreads_capstone/logs/step1_$(date +%Y%m%d_%H%M%S).log
 
 HDFS outputs:
-    /user/at7095_nyu_edu/goodreads/train.parquet
-    /user/at7095_nyu_edu/goodreads/val.parquet
-    /user/at7095_nyu_edu/goodreads/test.parquet
-    /user/at7095_nyu_edu/goodreads/train_small.parquet
-    /user/at7095_nyu_edu/goodreads/val_small.parquet
-    /user/at7095_nyu_edu/goodreads/test_small.parquet
+    /user/<netid>_nyu_edu/goodreads/train.parquet
+    /user/<netid>_nyu_edu/goodreads/val.parquet
+    /user/<netid>_nyu_edu/goodreads/test.parquet
+    /user/<netid>_nyu_edu/goodreads/train_small.parquet
+    /user/<netid>_nyu_edu/goodreads/val_small.parquet
+    /user/<netid>_nyu_edu/goodreads/test_small.parquet
 
 Local report artifacts:
     ~/goodreads_capstone/report_artifacts/step1_split_stats.txt
@@ -46,7 +46,7 @@ from pyspark.sql import functions as F
 from pyspark import StorageLevel
 
 # ---- Constants ----------------------------------------------------------
-NETID                = "at7095"
+NETID                = os.environ.get("NETID", "your_netid")
 DATA_DIR             = f"hdfs:///user/{NETID}_nyu_edu/goodreads"
 LOCAL_REPORT_DIR     = os.path.expanduser("~/goodreads_capstone/report_artifacts")
 os.makedirs(LOCAL_REPORT_DIR, exist_ok=True)

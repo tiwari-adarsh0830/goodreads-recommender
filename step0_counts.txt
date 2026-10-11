@@ -1,4 +1,4 @@
-=== Goodreads dataset sanity counts (at7095 step0) ===
+=== Goodreads dataset sanity counts (step0) ===
 interactions rows                :     228,648,342
 distinct users (in interactions) :         876,145
 distinct books (in interactions) :       2,360,650
