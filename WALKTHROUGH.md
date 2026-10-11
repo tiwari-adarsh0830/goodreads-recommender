@@ -1,4 +1,4 @@
-k# Capstone Walkthrough — DSGA1004 Big Data, Spring 2026
+# Capstone Walkthrough — DSGA1004 Big Data, Spring 2026
 **NetIDs:** at7095, ss21040
 
 This is our project walkthrough of what we built, ran, and found. The README has the formal project description.

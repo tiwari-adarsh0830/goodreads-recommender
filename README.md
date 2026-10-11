@@ -1,236 +1,69 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Jcvt4XaU)
-# DSGA1004 - BIG DATA
-## Capstone project: Goodreads Recommendation and Market Segmentation
+# Goodreads Book Recommender with Spark
 
-# Overview
+Our capstone for DS-GA 1004 Big Data at NYU (Spring 2026), by Adarsh Tiwari and Sheetal Sood.
 
-In the capstone project, you will apply the tools you have learned in this class to solve a realistic, large-scale applied problem. Specifically, you will use the Goodreads dataset to build and evaluate book recommendation systems, while also using scalable similarity methods to identify books that occupy similar positions in the reading market.
+We used the Goodreads interactions dataset (Wan & McAuley, RecSys 2018): about 223M user-book interactions across 876K users and 2.4M books. Everything ran on NYU's Dataproc cluster with PySpark. We built:
 
-The project is designed to integrate several core themes from the course: distributed storage, large-scale data preprocessing, similarity search, collaborative filtering, recommender-system evaluation, and the practical challenges of working with large user-item interaction data.
+1. **Market segmentation:** MinHash LSH to find the 100 book pairs read by the most similar groups of users
+2. **A popularity baseline**
+3. **Three ALS recommenders:** one on explicit ratings only, one on implicit signals (read / reviewed) only, and one that combines both
 
-You are encouraged to work in groups of up to 4 students.
+The full story of what we ran, what broke and why is in [WALKTHROUGH.md](WALKTHROUGH.md). The original assignment is in [ASSIGNMENT.md](ASSIGNMENT.md).
 
-## The data set
+## Results
 
-In this project, we will use the Goodreads dataset assembled by:
+Top-100 ranking metrics. The ALS models were evaluated on a 3% sample of users (about 22K) because of cluster limits. The popularity baseline was evaluated on the full split.
 
-Mengting Wan and Julian McAuley. “Item Recommendation on Monotonic Behavior Chains.” RecSys 2018.
+| Model | Signal | Val MAP@100 | Test MAP@100 | Test NDCG@100 |
+| --- | --- | --- | --- | --- |
+| Popularity | most-read books | 0.0311 | 0.0315 | 0.1036 |
+| Explicit ALS | ratings only | 0.000012 | 0.000006 | 0.000059 |
+| Implicit ALS | `is_read`, alpha = 40 | 0.0731 | 0.0738 | 0.2063 |
+| Implicit ALS + reviews | `is_read` + 0.5 x `is_reviewed` | 0.0708 | 0.0719 | 0.2032 |
+| **Combined ALS** | reads weighted by rating, plus reviews | **0.0734** | **0.0758** | **0.2089** |
 
-The core interaction data consists of user-book interactions. The main file has the following column structure:
+What we took away from it:
 
-user_id, book_id, is_read, rating, is_reviewed
+- **Implicit feedback is what works here.** Implicit ALS gets about 2.3x the popularity baseline's MAP. Explicit ALS is near zero: only about 46% of interactions have a rating, and we evaluate on what people read, not what they rated. Even when we scored it only against rated books it stayed near zero.
+- **Weighting reads by rating helped a little.** The combined model has the best numbers, but the gain over implicit ALS is small. Bootstrap 95% intervals on the 1% test sample (about 7.7K users, 500 resamples) overlap: implicit [0.0715, 0.0764], combined [0.0740, 0.0788]. So it's a consistent direction, not a decisive win.
+- **The most "similar" books are mostly the same book.** The top MinHash pairs have Jaccard similarity of 0.896 to 0.950, but most are different editions of one title. After merging editions with union-find, the 100 pairs collapse to 37 distinct work pairs.
 
-The dataset contains approximately 876K users, 2.4M books, and 223M interactions, with three main files: goodreads_interactions.csv, user_id_map.csv, and book_id_map.csv
+## What's in the repo
 
-These shared files are available in Dataproc's HDFS at:
+The main pipeline is at the top level, numbered by step:
 
-/user/pw44_nyu_edu/user_id_map.csv
+| File | What it does |
+| --- | --- |
+| `step0_csv_to_parquet.py` | Converts the raw CSVs to Parquet and writes sanity counts |
+| `step1_split.py` | Per-user 70/15/15 train/val/test split (seed 1004). Users with fewer than 10 interactions go to train only. Also makes a 1% sample for prototyping |
+| `step2_minhash.py` | MinHash LSH over books with at least 200 readers, top-100 pairs |
+| `step3_popularity.py` | Popularity baselines |
+| `step4_als_explicit_*.py` | Explicit ALS: tuning grid (rank x regParam), training, evaluation |
+| `step5_als_implicit_*.py` | Implicit ALS and the version with reviews added |
+| `step6_als_combined_*.py` | Combined explicit + implicit ALS |
+| `step_3pct_eval.py`, `step_d3_3pct_eval.py`, `step_d4v2_3pct_eval.py` | Final evaluations on the 3% user sample |
+| `eval_helpers.py` | Shared ranking-metric code |
 
-/user/pw44_nyu_edu/book_id_map.csv
+Other folders:
 
-/user/pw44_nyu_edu/goodreads_interactions.csv
+- `scripts/` has follow-up diagnostics: edition dedup, the rated-only evaluation, bootstrap intervals, and an implicit ALS tuning sweep we wrote but didn't get to run. See [scripts/README.md](scripts/README.md).
+- `results/` and the `step*.txt` / `step*.csv` files are saved outputs from our runs.
 
+## Running it
 
-You may read these files directly from HDFS. Do not repeatedly copy or reload the raw CSV unnecessarily. As an early preprocessing step, convert the raw CSV to Parquet in your own HDFS directory and use the Parquet version for downstream work.
+The scripts were written for NYU's Dataproc cluster (Spark on YARN with HDFS), and each one has its `spark-submit` command in the docstring at the top. They read and write under `hdfs:///user/<netid>_nyu_edu/goodreads`. In the top-level scripts our NetID is set in `NETID` or `BASE` near the top, so change it to yours. The scripts in `scripts/` read it from a `NETID` environment variable.
 
-The fields can be interpreted as follows:
+The raw data isn't in this repo. The Goodreads dataset is available from the [UCSD Goodreads dataset page](https://mengtingwan.github.io/data/goodreads.html).
 
-rating is the explicit preference signal: the numerical rating the user gave the book.
-is_read indicates whether the user marked the book as read. This is an implicit consumption signal, not necessarily a sign that the user liked the book.
-is_reviewed indicates whether the user wrote a review. This is an engagement signal, not necessarily a positive preference signal.
+## Team
 
-In other words:
+Adarsh Tiwari and Sheetal Sood. We made the design decisions together, and the commit history shows who pushed what.
 
-rating       = explicit evaluation
+## AI use
 
-is_read      = implicit consumption
+We used Claude (Anthropic) and Gemini (Google) for help with writing, debugging PySpark scripts and proofreading. This README was also put together with Claude's help from our walkthrough and results files. The experimental design, parameter choices and interpretation of results were our own.
 
-is_reviewed  = implicit engagement
+## References
 
-
-
-## Preprocessing and data splitting
-Before beginning the recommender-system components, you will need to preprocess the interaction data and partition it into training, validation, and test sets.
-
-We recommend writing scripts to do this in advance and saving the resulting datasets for future use, preferably in Parquet format. This will make your later experiments faster and more reproducible, here is why:
-The raw interaction file is large. CSV is convenient for distribution, but inefficient for repeated Spark jobs. One of your first steps should be to convert the interaction file to Parquet and use the Parquet version for all downstream computation.
-You can use code like this to do so:
-
-interactions = spark.read.csv(
-    "hdfs:///user/pw44_nyu_edu/goodreads_interactions.csv",
-    header=True,
-    inferSchema=True
-)
-
-interactions.write.mode("overwrite").parquet(
-    "hdfs:///user/[YOUR_NETID]_nyu_edu/goodreads/interactions.parquet"
-)
-
-Data splitting for recommender systems is more delicate than ordinary random train/test splitting. You should split the data in a way that preserves user histories. For validation and test users, make sure each user has some observed interactions available for generating recommendations and some held-out interactions available for evaluation. Remember: you cannot evaluate recommendations for a user with no observed history.
-
-You may discard users with too few interactions to support meaningful evaluation, but you must document exactly what you did.
-
-When prototyping your implementation, you should work on smaller user-based samples of the data before scaling to the full dataset. Do not downsample individual interactions independently. Instead, sample users and keep all relevant interactions for those users.
-
-## What we would like you to build / do (all 5 deliverables are equally weighted)
-
-## 1) Market segmentation
-
-Market segmentation relies on similarity. We first want you to identify books that occupy similar positions in the reading market.
-
-Find the top 100 pairs of books that are read by the most similar groups of users.
-
-For the sake of simplicity, you can operationalize a book’s “market position” by the set of users who have read it, regardless of the numerical rating. Two books are similar if many of the same users have read both books.
-
-We strongly recommend doing this with a MinHash-based algorithm.
-
-Your final report should include:
-
-the top 100 most similar book pairs;
-a suitable estimate of similarity for each pair;
-a brief explanation of your similarity measure;
-and a description of how you made the computation scalable.
-
-## 2) Recommendations with the Popularity baseline 
-Before implementing a sophisticated recommender system, begin with making recommendations with a popularity baseline. This should be simple enough to implement with basic dataframe computations.
-
-For example, you might recommend:
-
-the most frequently read books;
-the most frequently rated books;
-the most frequently highly rated books;
-or books ranked by a rating-weighted popularity score.
-
-Your popularity baseline should be evaluated on the validation and test data using the same general evaluation framework you will use for later models.
-
-Your report should clearly document:
-
-how your popularity score was defined;
-how recommendations were generated;
-and how the popularity baseline performed.
-
-## 3) Explicit-feedback ALS recommender
-
-Your first latent-factor recommendation model should use Spark’s alternating least squares method to learn latent factor representations for users and books.
-
-This model should be based strictly on explicit feedback: the numerical Goodreads ratings.
-
-That means the model should use rating as the preference signal. For this deliverable, do not use is_read or is_reviewed as model inputs.
-
-The ALS model has several hyperparameters that you should tune on the validation set, notably:
-
-the rank, meaning the dimension of the latent factors;
-and the regularization parameter.
-
-Once you are able to make predictions, evaluate the model on the validation and test data. Scores for validation and test should both be reported in your final write-up.
-
-Evaluations should be based on predictions of the top 100 books for each user, and should report appropriate ranking metrics. You may also additionally report RMSE, but ranking metrics should be central to your evaluation.
-
-Your report should document:
-
-your train/validation/test split;
-your choice of hyperparameters;
-your chosen evaluation metric;
-validation performance of the recommender system;
-test performance of the recommender system;
-and how the explicit-feedback model compares to the popularity baseline.
-
-As we discussed above, evaluations should be based on predictions of the top 100 items for each user, and report the ranking metrics provided by spark.
-Refer to the [ranking metrics](https://spark.apache.org/docs/3.0.1/mllib-evaluation-metrics.html#ranking-systems) section of the Spark documentation for more details.
-
-The choice of evaluation criteria for hyper-parameter tuning is up to you, as is the range of hyper-parameters you consider, but be sure to document your choices in the final report.
-As a general rule, you should explore ranges of each hyper-parameter that are sufficiently large to produce observable differences in your evaluation score.
-If you like, you may also use additional software implementations of recommendation or ranking metric evaluations, but be sure to cite any additional software you use in the project.
-
-
-## 4) Implicit-feedback ALS recommender
-
-Now, build a recommender system based only on implicit feedback.
-
-For this deliverable, do not use the numerical ratings as the preference signal. Instead, construct a model from behavioral information such as whether the user read or reviewed the book.
-
-For example, you might use:
-
-is_read
-
-as a binary implicit preference signal, and perhaps use:
-
-is_reviewed
-
-as an additional engagement or confidence signal.
-
-The key conceptual distinction is:
-
-is_read      = evidence of consumption
-is_reviewed  = evidence of engagement
-
-Neither field necessarily means that the user liked the book. A book can be read without necessarily having a useful numerical rating, and a review does not imply a positive rating.
-
-Evaluate this implicit-feedback model using the same validation and test framework as the explicit-feedback model.
-
-Your report should explain:
-
-how you used implicit feedback as model inputs;
-whether you used Spark ALS in implicit-feedback mode;
-how you interpreted is_read and is_reviewed;
-and how the implicit-feedback model compares to the explicit-feedback model from deliverable 3.
-
-
-## 5) Combined explicit + implicit feedback model
-
-Finally, build a model that combines explicit and implicit feedback into a single recommendation system.
-
-For this deliverable, you should use the implicit-feedback fields to transform, weight, or synthesize a new rating-like or confidence-like signal.
-
-For example, you might combine:
-
-the numerical rating;
-whether the user marked the book as read;
-whether the user reviewed the book;
-or other transformations of these fields that you can justify.
-
-One simple approach would be to construct a combined score such as:
-
-combined_score = f(rating, is_read, is_reviewed)
-
-Another approach would be to treat the rating as the explicit preference signal, while using is_read and is_reviewed to modify the confidence assigned to the interaction.
-
-You are not expected to invent a new recommender algorithm from scratch. You may reuse Spark ALS. The main requirement is that your model uses both explicit and implicit information in a principled way.
-
-Your report should clearly explain:
-
-how explicit and implicit feedback were combined;
-why your transformation is reasonable;
-what hyperparameters or weighting choices you considered;
-and whether the combined model improved performance relative to:
-the popularity baseline;
-the explicit-feedback ALS model;
-and the implicit-feedback ALS model.
-
-### Using the cluster
-
-Please be considerate of your fellow classmates!
-The Dataproc cluster is a limited, shared resource. 
-Make sure that your code is properly implemented and works efficiently. 
-If too many people run inefficient code simultaneously, it can slow down the entire cluster for everyone.
-
-
-## What to turn in
-
-In addition to all of your code, produce a final report (no more than 5 pages), describing your implementation, answer to questions and evaluation results.
-Your report should clearly identify the contributions of each member of your group, as well as AI contributions.
-If any additional software components were required in your project, your choices should be described and well motivated here.  
-
-Include a PDF of your final report through Brightspace.  Specifically, your final report should include the following details:
-
-- Link to your group's GitHub repository
-- List of top 100 most similar pairs (include a suitable estimate of their similarity for each pair), sorted by similarity
-- Documentation of how your train/validation splits were generated
-- Any additional pre-processing of the data that you decide to implement
-- Evaluation of popularity baseline
-- Documentation of latent factor models hyper-parameters and validation
-- Evaluation of latent factor models
-
-Any additional software components that you use should be cited and documented with installation instructions.
-
-
+- Mengting Wan and Julian McAuley. Item Recommendation on Monotonic Behavior Chains. RecSys 2018.
+- Yifan Hu, Yehuda Koren and Chris Volinsky. Collaborative Filtering for Implicit Feedback Datasets. ICDM 2008.
